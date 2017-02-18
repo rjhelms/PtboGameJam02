@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7852ba2dab629641927aeae409add10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  worldPosition: {x: 0, y: 0}
   DirectionSprites:
   - {fileID: 21300008, guid: 7e77c6ea323a1fa4e81ece145be88e5a, type: 3}
   - {fileID: 21300006, guid: 7e77c6ea323a1fa4e81ece145be88e5a, type: 3}
@@ -252,6 +253,7 @@ GameObject:
   - component: {fileID: 581069907}
   - component: {fileID: 581069906}
   - component: {fileID: 581069905}
+  - component: {fileID: 581069910}
   m_Layer: 0
   m_Name: WorldCamera
   m_TagString: MainCamera
@@ -327,6 +329,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &581069910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 581069904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5571664f198a2f945842a657b9375d16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Player: {fileID: 67334098}
+  CameraZOffset: -10
+  LerpSpeed: 1.5
 --- !u!1 &642043605
 GameObject:
   m_ObjectHideFlags: 0
