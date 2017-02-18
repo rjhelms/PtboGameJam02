@@ -20,7 +20,8 @@ public class BoardCreator : MonoBehaviour
     public GameObject[] wallTiles;                            // An array of wall tile prefabs.
     public GameObject[] outerWallTiles;                       // An array of outer wall tile prefabs.
     public GameObject player;
-
+	public int GridX = 32;
+	public int GridY = 20;
     private TileType[][] tiles;                               // A jagged array of tile types representing the board, like a grid.
     private Room[] rooms;                                     // All the rooms that are created for this board.
     private Corridor[] corridors;                             // All the corridors that connect the rooms.
@@ -96,7 +97,7 @@ public class BoardCreator : MonoBehaviour
             
             if (i == rooms.Length *.5f)
             {
-                Vector3 playerPos = new Vector3 (rooms[i].xPos, rooms[i].yPos, 0);
+                Vector3 playerPos = new Vector3 (rooms[i].xPos * GridX, rooms[i].yPos * GridY, 0);
                 Instantiate(player, playerPos, Quaternion.identity);
             }
         }
@@ -175,15 +176,15 @@ public class BoardCreator : MonoBehaviour
         {
             for (int j = 0; j < tiles[i].Length; j++)
             {
-                // ... and instantiate a floor tile for it.
-                InstantiateFromArray (floorTiles, i, j);
-
                 // If the tile type is Wall...
                 if (tiles[i][j] == TileType.Wall)
                 {
                     // ... instantiate a wall over the top.
                     InstantiateFromArray (wallTiles, i, j);
-                }
+                } else {
+					// ... otherwise instantiate a floor tile for it.
+                	InstantiateFromArray (floorTiles, i, j);
+				}
             }
         }
     }
@@ -243,9 +244,12 @@ public class BoardCreator : MonoBehaviour
     {
         // Create a random index for the array.
         int randomIndex = Random.Range(0, prefabs.Length);
+		
+		float worldX = xCoord * GridX;
+		float worldY = yCoord * GridY;
 
         // The position to be instantiated at is based on the coordinates.
-        Vector3 position = new Vector3(xCoord, yCoord, 0f);
+        Vector3 position = new Vector3(worldX, worldY, 0f);
 
         // Create an instance of the prefab from the random index of the array.
         GameObject tileInstance = Instantiate(prefabs[randomIndex], position, Quaternion.identity) as GameObject;
