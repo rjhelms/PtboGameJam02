@@ -5,11 +5,22 @@ using UnityEngine;
 public class Actor : BaseEntity {
 
 	public Sprite[] DirectionSprites;
-	private SpriteRenderer renderer;
-
+	private SpriteRenderer sprite_renderer;
+	private float slice_angle;
+	private Vector2[] rotation_vectors;
+	
 	protected override void Start ()
 	{
-		renderer = GetComponent<SpriteRenderer>();
+		slice_angle = Mathf.Cos(Mathf.Deg2Rad * 22.5f);
+		rotation_vectors[0] = Vector2.up;
+		rotation_vectors[1] = (Vector2.up - Vector2.right).normalized;
+		rotation_vectors[2] = -Vector2.right;
+		rotation_vectors[3] = (-Vector2.up - Vector2.right).normalized;
+		rotation_vectors[4] = -Vector2.up;
+		rotation_vectors[5] = (-Vector2.up + Vector2.right).normalized;
+		rotation_vectors[6] = Vector2.right;
+		rotation_vectors[7] = (Vector2.up + Vector2.right).normalized;
+		sprite_renderer = GetComponent<SpriteRenderer>();
 		base.Start();
 	}
 	// Update is called once per frame
@@ -19,27 +30,20 @@ public class Actor : BaseEntity {
 
 	public void Move(Vector2 move_vector)
 	{
-		// parcel up into 90 degrees for now - will do 45 later
-		Vector2 up = Vector2.up;
-		Vector2 down = -up;
-		Vector2 right = Vector2.right;
-		Vector2 left = -right;
 		Vector2 normal_move = move_vector.normalized;
-		if (Vector2.Dot(normal_move, up) > 0.707f)
+		int target_sprite_index = -1;
+		for (int i = 0; i < 8; i++)
 		{
-			renderer.sprite = DirectionSprites[0];
-		} else if (Vector2.Dot(normal_move, left) > 0.707f)
-		{
-			renderer.sprite = DirectionSprites[1];
-		} else if (Vector2.Dot(normal_move, down) > 0.707f)
-		{
-			renderer.sprite = DirectionSprites[2];
-		} else if (Vector2.Dot(normal_move, right) > 0.707f)
-		{
-			renderer.sprite = DirectionSprites[3];
+			if (Vector2.Dot(normal_move, rotation_vectors[i]) > slice_angle)
+			{
+				target_sprite_index = i;
+			}
 		}
-		else {
+		if (target_sprite_index == -1)
+		{
 			Debug.Log("fell through sprite cases" + move_vector);
+		} else {
+			sprite_renderer.sprite = DirectionSprites[target_sprite_index];
 		}
 		worldPosition += move_vector;
 	}
