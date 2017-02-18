@@ -8,10 +8,11 @@ public class Actor : BaseEntity {
 	private SpriteRenderer sprite_renderer;
 	private float slice_angle;
 	private Vector2[] rotation_vectors;
-	
+
 	protected override void Start ()
 	{
 		slice_angle = Mathf.Cos(Mathf.Deg2Rad * 22.5f);
+		rotation_vectors = new Vector2[8];
 		rotation_vectors[0] = Vector2.up;
 		rotation_vectors[1] = (Vector2.up - Vector2.right).normalized;
 		rotation_vectors[2] = -Vector2.right;

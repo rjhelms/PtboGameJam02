@@ -25,6 +25,7 @@ public class GameController : MonoBehaviour {
 		float y_movement = Input.GetAxis("Vertical") * MoveSpeed;
 		Vector2 movement = new Vector2(x_movement, y_movement)
 						   		* Time.deltaTime;
+
 		if (movement.magnitude > 0)
 		{
 			Player.Move(movement);
