@@ -7,6 +7,8 @@ public class BaseEntity : MonoBehaviour {
 	[SerializeField]
 	protected Vector2 worldPosition;
 	protected Vector2 screenPosition;
+	[SerializeField]
+	protected Vector2 screenPositionOffset;
 	public Vector2 WorldPosition
 	{
 		get { return worldPosition;}
@@ -22,6 +24,6 @@ public class BaseEntity : MonoBehaviour {
 	protected virtual void Update () {
 		screenPosition.x = Mathf.RoundToInt(worldPosition.x);
 		screenPosition.y = Mathf.RoundToInt(worldPosition.y);
-		transform.position = screenPosition;
+		transform.position = screenPosition + screenPositionOffset;
 	}
 }
