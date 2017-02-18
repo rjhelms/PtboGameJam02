@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class BaseEntity : MonoBehaviour {
 
-	private Vector2 worldPosition;
-	private Vector2 screenPosition;
+	protected Vector2 worldPosition;
+	protected Vector2 screenPosition;
 	public Vector2 WorldPosition
 	{
 		get { return worldPosition;}
@@ -13,12 +13,12 @@ public class BaseEntity : MonoBehaviour {
 	}
 
 	// Use this for initialization
-	void Start () {
+	protected virtual void Start () {
 		worldPosition = (Vector2)transform.position;
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	protected virtual void Update () {
 		screenPosition.x = Mathf.RoundToInt(worldPosition.x);
 		screenPosition.y = Mathf.RoundToInt(worldPosition.y);
 		transform.position = screenPosition;

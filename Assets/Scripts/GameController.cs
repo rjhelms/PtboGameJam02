@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour {
 
-	public BaseEntity Player;
+	public Actor Player;
 	public float MoveSpeed = 120.0f;
 
 	// Use this for initialization
@@ -25,6 +25,9 @@ public class GameController : MonoBehaviour {
 		float y_movement = Input.GetAxis("Vertical") * MoveSpeed;
 		Vector2 movement = new Vector2(x_movement, y_movement)
 						   		* Time.deltaTime;
-		Player.WorldPosition += movement;
+		if (movement.magnitude > 0)
+		{
+			Player.Move(movement);
+		}
 	}
 }
