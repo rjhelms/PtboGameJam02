@@ -31,5 +31,10 @@ public class PlayerFollower : MonoBehaviour {
 	{
 		Player = player;
 		world_position = player.WorldPosition;
+		Vector3 new_position = new Vector3(
+							       Mathf.RoundToInt(world_position.x),
+								   Mathf.RoundToInt(world_position.y),
+								   CameraZOffset);
+		transform.position = new_position;
 	}
 }

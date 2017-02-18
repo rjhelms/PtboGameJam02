@@ -17,7 +17,7 @@ public class BaseEntity : MonoBehaviour {
 
 	// Use this for initialization
 	protected virtual void Start () {
-		worldPosition = (Vector2)transform.position;
+		Initialize();
 	}
 	
 	// Update is called once per frame
@@ -25,5 +25,10 @@ public class BaseEntity : MonoBehaviour {
 		screenPosition.x = Mathf.RoundToInt(worldPosition.x);
 		screenPosition.y = Mathf.RoundToInt(worldPosition.y);
 		transform.position = screenPosition + screenPositionOffset;
+	}
+
+	public virtual void Initialize()
+	{
+		worldPosition = (Vector2)transform.position;
 	}
 }

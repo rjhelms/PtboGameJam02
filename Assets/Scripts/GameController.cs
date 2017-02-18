@@ -37,6 +37,7 @@ public class GameController : MonoBehaviour {
 	public void RegisterPlayer (GameObject player)
 	{
 		Player = player.GetComponent<Actor>();
+		Player.Initialize();
 		Debug.Log(Player);
 		playerFollower.SetPlayer(Player);
 	}

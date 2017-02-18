@@ -9,21 +9,6 @@ public class Actor : BaseEntity {
 	private float slice_angle;
 	private Vector2[] rotation_vectors;
 
-	protected override void Start ()
-	{
-		slice_angle = Mathf.Cos(Mathf.Deg2Rad * 22.5f);
-		rotation_vectors = new Vector2[8];
-		rotation_vectors[0] = Vector2.up;
-		rotation_vectors[1] = (Vector2.up - Vector2.right).normalized;
-		rotation_vectors[2] = -Vector2.right;
-		rotation_vectors[3] = (-Vector2.up - Vector2.right).normalized;
-		rotation_vectors[4] = -Vector2.up;
-		rotation_vectors[5] = (-Vector2.up + Vector2.right).normalized;
-		rotation_vectors[6] = Vector2.right;
-		rotation_vectors[7] = (Vector2.up + Vector2.right).normalized;
-		sprite_renderer = GetComponent<SpriteRenderer>();
-		base.Start();
-	}
 	// Update is called once per frame
 	protected override void Update () {
 		base.Update();
@@ -48,4 +33,21 @@ public class Actor : BaseEntity {
 		}
 		worldPosition += move_vector;
 	}
+
+	public override void Initialize()
+	{
+		slice_angle = Mathf.Cos(Mathf.Deg2Rad * 22.5f);
+		rotation_vectors = new Vector2[8];
+		rotation_vectors[0] = Vector2.up;
+		rotation_vectors[1] = (Vector2.up - Vector2.right).normalized;
+		rotation_vectors[2] = -Vector2.right;
+		rotation_vectors[3] = (-Vector2.up - Vector2.right).normalized;
+		rotation_vectors[4] = -Vector2.up;
+		rotation_vectors[5] = (-Vector2.up + Vector2.right).normalized;
+		rotation_vectors[6] = Vector2.right;
+		rotation_vectors[7] = (Vector2.up + Vector2.right).normalized;
+		sprite_renderer = GetComponent<SpriteRenderer>();
+		base.Initialize();
+	}
+
 }
