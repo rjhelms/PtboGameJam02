@@ -297,7 +297,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: f0798fd05a751454eba60187b0703c89, type: 2}
+  m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 0
@@ -346,7 +346,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 67334098}
-  MoveSpeed: 20
+  MoveSpeed: 120
 --- !u!4 &642043607
 Transform:
   m_ObjectHideFlags: 0
