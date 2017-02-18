@@ -11,7 +11,7 @@ public class PlayerFollower : MonoBehaviour {
 	private Vector2 world_position;
 	// Use this for initialization
 	void Start () {
-		world_position = Player.WorldPosition;
+
 	}
 	
 	// Update is called once per frame
@@ -25,5 +25,11 @@ public class PlayerFollower : MonoBehaviour {
 								   Mathf.RoundToInt(world_position.y),
 								   CameraZOffset);
 		transform.position = new_position;
+	}
+
+	public void SetPlayer (Actor player)
+	{
+		Player = player;
+		world_position = player.WorldPosition;
 	}
 }
