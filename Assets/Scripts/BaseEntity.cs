@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BaseEntity : MonoBehaviour {
 
+	[SerializeField]
 	protected Vector2 worldPosition;
 	protected Vector2 screenPosition;
 	public Vector2 WorldPosition
