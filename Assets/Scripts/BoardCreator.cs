@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BoardCreator : MonoBehaviour
@@ -273,6 +274,7 @@ public class BoardCreator : MonoBehaviour
         int random_distance = endTargetDistance.Random;
         Debug.Log("Creating end target " + random_distance 
                   + " units away from player.");
+        List<int[]> Candidates = new List<int[]>();
         for (int i = 0; i < tiles.Length; i++)
         {
             for (int j = 0; j < tiles[i].Length; j++)
@@ -284,12 +286,22 @@ public class BoardCreator : MonoBehaviour
                                    + Mathf.Pow((j - playerY), 2)));
                     if (tile_distance == random_distance)
                     {
-                        Instantiate(endTarget, 
-                                    new Vector3(i * GridX, j * GridY, 0),
-                                    Quaternion.identity);
+                        Candidates.Add(new int[2] {i,j});
                     }
                 }
             }
+        }
+
+        if (Candidates.Count == 0)
+        {
+            Debug.LogError("no tiles for end point!!!!");
+        } else {
+            int endTargetIndex = Random.Range(0, Candidates.Count - 1);
+            Instantiate(endTarget,
+                       new Vector3(Candidates[endTargetIndex][0] * GridX,
+                                   Candidates[endTargetIndex][1] * GridY,
+                                   0),
+                       Quaternion.identity);
         }
     }
 }

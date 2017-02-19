@@ -17,7 +17,7 @@ public class PlayerEntity : Actor
     {
         base.Move(move_vector);
         Vector2 cameraTargetOffset = GetComponent<Rigidbody2D>().velocity * CameraLookAheadFactor;
-        // cameraTargetOffset.y /= 1.5f;
+        cameraTargetOffset.y *= 0.6f;
         cameraTarget = screenPosition + screenPositionOffset 
                            + cameraTargetOffset;
     }
