@@ -20,6 +20,8 @@ public class GameController : MonoBehaviour {
 	public Vector2 PlayerPosition {
 		get { return (Vector2)Player.OffsetPosition; }
 	}
+	public Sprite[] PointerSprites;
+	public SpriteRenderer Pointer;
 	private ControllerState state;
 	private PlayerFollower playerFollower;
 	// Use this for initialization
@@ -41,6 +43,36 @@ public class GameController : MonoBehaviour {
 			foreach (Enemy enemy in Enemies)
 			{
 				enemy.PathTo(Player.gameObject);
+			}
+		}
+		if (Target != null)
+		{
+			RaycastHit2D pointer_location = Physics2D.Linecast(
+				WorldCamera.transform.position, 
+				(Vector2)Target.transform.position + new Vector2(16, 16),
+				LayerMask.GetMask("UI"));
+			if (pointer_location.collider == null)
+			{
+				Pointer.enabled = false;
+			} else {
+				if (pointer_location.collider.name == "Pointer_Collider_Top")
+				{
+					Pointer.sprite = PointerSprites[0];
+				} else if (pointer_location.collider.name ==
+					"Pointer_Collider_Left")
+				{
+					Pointer.sprite = PointerSprites[1];
+				} else if (pointer_location.collider.name ==
+					"Pointer_Collider_Bottom")
+				{
+					Pointer.sprite = PointerSprites[2];
+				} else if (pointer_location.collider.name ==
+					"Pointer_Collider_Right")
+				{
+					Pointer.sprite = PointerSprites[3];
+				}
+				Pointer.enabled = true;
+				Pointer.transform.position = pointer_location.point;
 			}
 		}
 	}
