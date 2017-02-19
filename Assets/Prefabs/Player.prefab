@@ -100,6 +100,5 @@ MonoBehaviour:
   - {fileID: 21300014, guid: 7e77c6ea323a1fa4e81ece145be88e5a, type: 3}
   - {fileID: 21300012, guid: 7e77c6ea323a1fa4e81ece145be88e5a, type: 3}
   - {fileID: 21300010, guid: 7e77c6ea323a1fa4e81ece145be88e5a, type: 3}
-  actorCollider: {fileID: 0}
   cameraTarget: {x: 0, y: 0}
-  CameraLookAheadFactor: 1.2
+  CameraLookAheadFactor: 1.1
