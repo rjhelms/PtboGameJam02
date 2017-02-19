@@ -20,6 +20,8 @@ public class BoardCreator : MonoBehaviour
     public IntRange roomHeight = new IntRange (3, 10);        // The range of heights rooms can have.
     public IntRange corridorLength = new IntRange (6, 10);    // The range of lengths corridors between rooms can have.
     public IntRange endTargetDistance = new IntRange(15, 20);
+    public IntRange enemySafeDistance = new IntRange(5, 8);
+    public IntRange enemyCount = new IntRange(10, 10);
     public GameObject[] floorTiles;                           // An array of floor tile prefabs.
     public GameObject[] wallTiles;                            // An array of wall tile prefabs.
     public GameObject[] outerWallTiles;                       // An array of outer wall tile prefabs.
@@ -51,7 +53,7 @@ public class BoardCreator : MonoBehaviour
 
         InstantiateTiles ();
         InstantiateOuterWalls ();
-        CreateLevelEndTarget ();
+        CreateEntities ();
 
         Pathfinder.Scan();
     }
@@ -275,54 +277,69 @@ public class BoardCreator : MonoBehaviour
         tileInstance.transform.parent = boardHolder.transform;
     }
 
-    void CreateLevelEndTarget ()
+    void CreateEntities ()
     {
-        int random_distance = endTargetDistance.Random;
-        Debug.Log("Creating end target " + random_distance 
+        int target_distance = endTargetDistance.Random;
+        int enemy_safe_distance = enemySafeDistance.Random;
+        int enemy_count = enemyCount.Random;
+
+        Debug.Log("Creating end target " + target_distance 
                   + " units away from player.");
-        List<int[]> Candidates = new List<int[]>();
+        List<int[]> TargetCandidateTiles = new List<int[]>();
+        List<int[]> EnemyCandidateTiles = new List<int[]>();
         for (int i = 0; i < tiles.Length; i++)
         {
             for (int j = 0; j < tiles[i].Length; j++)
             {
                 if (tiles[i][j] == TileType.Floor)
                 {
-                    int tile_distance = Mathf.RoundToInt(
-                        Mathf.Sqrt(Mathf.Pow(i - playerX, 2)
-                                   + Mathf.Pow((j - playerY), 2)));
-                    if (tile_distance == random_distance)
+                    float tile_distance = (Mathf.Sqrt(Mathf.Pow(i - playerX, 2)
+                                               + Mathf.Pow((j - playerY), 2)));
+                    if (target_distance == Mathf.RoundToInt(tile_distance))
                     {
-                        Candidates.Add(new int[2] {i,j});
+                        TargetCandidateTiles.Add(new int[] {i,j});
+                    } else if (tile_distance > enemy_safe_distance)
+                    {
+                        EnemyCandidateTiles.Add(new int [] {i, j});
                     }
                 }
             }
         }
 
-        if (Candidates.Count < 2)
+        if (TargetCandidateTiles.Count < 1)
         {
             Debug.LogWarning("no tiles for end point!!!!");
             SceneManager.LoadScene("main");
+        } else if (EnemyCandidateTiles.Count < enemy_count)
+        {   
+            Debug.LogWarning("not enough candidate tiles for enemy!");
+            SceneManager.LoadScene("main");
         } else {
-            int randomIndex = Random.Range(0, Candidates.Count - 1);
-            int[] endTargetLocation = Candidates[randomIndex];
+            // spawn target
+            int target_tile = Random.Range(0, TargetCandidateTiles.Count - 1);
+            int[] endTargetLocation = TargetCandidateTiles[target_tile];
             GameObject target = Instantiate(
                 endTarget, new Vector3(endTargetLocation[0] * GridX,
                                        endTargetLocation[1] * GridY,
                                        0),
                 Quaternion.identity);
             gameController.RegisterTarget(target);
-            Candidates.RemoveAt(randomIndex);
+            TargetCandidateTiles.RemoveAt(target_tile);
             
-            // instantiate enemy for shits
-            randomIndex = Random.Range(0, Candidates.Count - 1);
-            int[] enemyLocation = Candidates[randomIndex];
-            randomIndex = Random.Range(0, enemies.Length);
-            GameObject enemy = Instantiate(
-                enemies[randomIndex], new Vector3(enemyLocation[0] * GridX,
-                                                  enemyLocation[1] * GridY,
-                                                  0),
-                Quaternion.identity);
-            gameController.RegisterEnemy(enemy);
+            // spawn enemies
+            for (int i = 0; i < enemy_count; i++)
+            {
+                target_tile = Random.Range(0, EnemyCandidateTiles.Count - 1);
+                int[] enemyLocation = EnemyCandidateTiles[target_tile];
+                int prefab_index = Random.Range(0, enemies.Length);
+                GameObject enemy = Instantiate(
+                    enemies[prefab_index], new Vector3(
+                        enemyLocation[0] * GridX, enemyLocation[1] * GridY,
+                        0),
+                    Quaternion.identity);
+                gameController.RegisterEnemy(enemy);
+                EnemyCandidateTiles.RemoveAt(target_tile);
+            }
         }
     }
 }
