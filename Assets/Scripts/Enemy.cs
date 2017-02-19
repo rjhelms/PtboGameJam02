@@ -15,10 +15,13 @@ public class Enemy : Actor {
     public Path path;
     public float nextWaypointDistance = 16f;
     public float IdlePathingTargetDistance = 320f;
+    public EnemyState State;
+    public float CollisionStallTime = 1f;
     private Seeker seeker;
     private int currentWaypoint;
-    [SerializeField]
-    private EnemyState state;
+
+    private List<GameObject> collisionsToResolve = new List<GameObject>();
+    private float collisionStallTimer = 0f;
     protected override void Start()
     {
         base.Start();
@@ -29,7 +32,7 @@ public class Enemy : Actor {
     {
         if (path == null) {
             Move(Vector2.zero);
-            if (state == EnemyState.IDLE)
+            if (State == EnemyState.IDLE)
             {
                 SetIdleTarget();
             }
@@ -37,7 +40,6 @@ public class Enemy : Actor {
         }
         if (currentWaypoint > path.vectorPath.Count) return;
         if (currentWaypoint == path.vectorPath.Count) {
-            Debug.Log("End Of Path Reached");
             path = null;
             currentWaypoint++;
             Move(Vector2.zero);
@@ -74,7 +76,6 @@ public class Enemy : Actor {
 
     public void PathTo(Vector3 target)
     {
-        Debug.Log("Pathing");
         seeker.StartPath(transform.position, target 
                                              + new Vector3(16,16, 0),
                          OnPathComplete);
@@ -82,7 +83,6 @@ public class Enemy : Actor {
 
     public void OnPathComplete(Path p)
     {
-        Debug.Log("Path found");
         if (!p.error) {
             path = p;
             // Reset the waypoint counter so that we start to move towards 
@@ -94,6 +94,47 @@ public class Enemy : Actor {
     public override void Initialize()
     {
         base.Initialize();
-        state = EnemyState.IDLE;
+        State = EnemyState.IDLE;
+    }
+
+    public void InvalidatePath()
+    {
+        path = null;
+        collisionStallTimer = 0f;
+    }
+
+    void OnCollisionEnter2D(Collision2D coll)
+    {
+        if (coll.gameObject.tag == "Enemy")
+        {
+            Enemy other = coll.gameObject.GetComponent<Enemy>();
+            if (other.State == EnemyState.IDLE & State == EnemyState.IDLE)
+            {
+                // both idle - just force repathing
+                InvalidatePath();
+                other.InvalidatePath();
+            }
+            collisionsToResolve.Add(coll.gameObject);
+        }
+    }
+
+    void OnCollisionStay2D(Collision2D coll)
+    {
+        collisionStallTimer += Time.fixedDeltaTime;
+        if (collisionStallTimer >= CollisionStallTime)
+        {
+            InvalidatePath();
+        }
+    }
+    void OnCollisionExit2D(Collision2D coll)
+    {
+        if (collisionsToResolve.Contains(coll.gameObject))
+        {
+            collisionsToResolve.Remove(coll.gameObject);
+        }
+        if (collisionsToResolve.Count == 0)
+        {
+            collisionStallTimer = 0f;
+        }
     }
 }

@@ -135,6 +135,12 @@ MonoBehaviour:
   endTargetDistance:
     m_Min: 25
     m_Max: 30
+  enemySafeDistance:
+    m_Min: 5
+    m_Max: 8
+  enemyCount:
+    m_Min: 10
+    m_Max: 10
   floorTiles:
   - {fileID: 1016174696619842, guid: 2970df403c2881048ad5e4b6f81baac2, type: 2}
   wallTiles:
@@ -576,7 +582,7 @@ MonoBehaviour:
   manualDebugFloorRoof: 0
   showSearchTree: 0
   unwalkableNodeDebugSize: 0.3
-  logPathResults: 1
+  logPathResults: 4
   maxNearestNodeDistance: 100
   scanOnStartup: 0
   fullGetNearestSearch: 0
@@ -627,7 +633,7 @@ MonoBehaviour:
   heuristic: 2
   heuristicScale: 1
   threadCount: 0
-  maxFrameTime: 10
+  maxFrameTime: 5
   minAreaSize: 0
   batchGraphUpdates: 0
   graphUpdateBatchingInterval: 0.2

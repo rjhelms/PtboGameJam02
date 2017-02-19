@@ -104,7 +104,8 @@ MonoBehaviour:
   MoveSpeed: 128
   nextWaypointDistance: 16
   IdlePathingTargetDistance: 320
-  state: 0
+  State: 0
+  CollisionStallTime: 1
 --- !u!114 &114550100091208258
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -116,7 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 373b52eb9bf8c40f785bb6947a1aee66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drawGizmos: 1
+  drawGizmos: 0
   detailedGizmos: 0
   startEndModifier:
     addPoints: 0
