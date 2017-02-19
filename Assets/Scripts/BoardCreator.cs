@@ -279,7 +279,9 @@ public class BoardCreator : MonoBehaviour
             {
                 if (tiles[i][j] == TileType.Floor)
                 {
-                    int tile_distance = Mathf.Abs(i - playerX) + Mathf.Abs(j - playerY);
+                    int tile_distance = Mathf.RoundToInt(
+                        Mathf.Sqrt(Mathf.Pow(i - playerX, 2)
+                                   + Mathf.Pow((j - playerY), 2)));
                     if (tile_distance == random_distance)
                     {
                         Instantiate(endTarget, 
