@@ -24,7 +24,9 @@ public class BaseEntity : MonoBehaviour {
 	protected virtual void Update () {
 		screenPosition.x = Mathf.RoundToInt(transform.position.x);
 		screenPosition.y = Mathf.RoundToInt(transform.position.y);
-		EntitySprite.transform.position = screenPosition;
+		EntitySprite.transform.position = new Vector3(screenPosition.x,
+													  screenPosition.y,
+													  screenPosition.y);
 	}
 
 	public virtual void Initialize()
