@@ -6,7 +6,8 @@ using Pathfinding;
 public enum EnemyState {
     IDLE,
     CHASE,
-    DEAD
+    DEAD,
+    REVIVING,
 }
 
 public class Enemy : Actor {
@@ -20,6 +21,8 @@ public class Enemy : Actor {
     public float CollisionStallTime = 1f;
     public float IdleCheckTime = 1f;
     public float ChaseCheckTime = 3f;
+    public float DeadCheckTime = 7f;
+    public float ReviveCheckTime = 3f;
     public Sprite DeadSprite;
     public Collider2D MainCollider;
     public Collider2D ChildCollider;
@@ -90,6 +93,24 @@ public class Enemy : Actor {
                         dir *= ChaseMoveSpeed;
                         moveVector = (Vector2)dir;
                     }
+                }
+                break;
+            case EnemyState.DEAD:
+                if (Time.time > nextCheck)
+                {
+                    State = EnemyState.REVIVING;
+                    sprite_renderer.sprite = DirectionSprites[0];
+                    sprite_renderer.color = new Color(1f,1f,1f,0.5f);
+                    nextCheck = Time.fixedTime + ReviveCheckTime;
+                }   
+                break;
+            case EnemyState.REVIVING:
+                if (Time.time > nextCheck)
+                {
+                    sprite_renderer.color = Color.white;
+                    MainCollider.enabled = true;
+                    ChildCollider.enabled = true;
+                    State = EnemyState.IDLE;
                 }
                 break;
             default:
@@ -201,6 +222,7 @@ public class Enemy : Actor {
         ChildCollider.enabled = false;
         sprite_renderer.sprite = DeadSprite;
         State = EnemyState.DEAD;
+        nextCheck = Time.fixedTime + DeadCheckTime;
     }
     void OnCollisionEnter2D(Collision2D coll)
     {
