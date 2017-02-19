@@ -123,6 +123,9 @@ public class Enemy : Actor {
                 other.InvalidatePath();
             }
             collisionsToResolve.Add(coll.gameObject);
+        } else if (coll.gameObject.tag == "Player")
+        {
+            FindObjectOfType<GameController>().Lose();
         }
 
     }

@@ -12,6 +12,7 @@ public class GameController : MonoBehaviour {
 	private PlayerFollower playerFollower;
 	// Use this for initialization
 	void Start () {
+		Time.timeScale = 1f;
 		playerFollower = FindObjectOfType<PlayerFollower>();
 		Debug.Log(playerFollower);
 	}
@@ -54,6 +55,7 @@ public class GameController : MonoBehaviour {
 	public void RegisterTarget (GameObject target)
 	{
 		Target = target;
+		Target.GetComponent<StaticEntity>().Initialize();
 	}
 
 	public void RegisterEnemy (GameObject enemyGameObject)
@@ -63,6 +65,12 @@ public class GameController : MonoBehaviour {
 		Enemies.Add(enemy);
 	}
 
+	public void Lose()
+	{
+		Debug.Log("Womp womp");
+		Time.timeScale = 0f;
+		SceneManager.LoadSceneAsync("main");
+	}
 	// void OnDrawGizmos()
 	// {
 	// 	Gizmos.color = Color.red;
