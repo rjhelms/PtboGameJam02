@@ -8,11 +8,13 @@ public enum ControllerState {
     WIN,
     LOSE,
     FADE_IN,
+	LOADING,
 }
 
 public class GameController : MonoBehaviour {
 
 	public PlayerEntity Player;
+	public bool ready = false;
 	public GameObject Target;
 	public float MoveSpeed = 120.0f;
 	public Camera WorldCamera;
@@ -22,65 +24,111 @@ public class GameController : MonoBehaviour {
 	}
 	public Sprite[] PointerSprites;
 	public SpriteRenderer Pointer;
+	public float fadeTime;
 	public float ProjectileFireTime = 0.2f;
+	public SpriteRenderer Blackout;
 	private ControllerState state;
 	private PlayerFollower playerFollower;
 	public GameObject ProjectilePrefab;
 	private Vector2 last_movement;
 	private float nextProjectileFire;
+	public float fadeStartTime;
 
 	// Use this for initialization
 	void Start () {
-		Time.timeScale = 1f;
+		Time.timeScale = 0f;
 		playerFollower = FindObjectOfType<PlayerFollower>();
 		Debug.Log(playerFollower);
-		state = ControllerState.RUNNING;
+		state = ControllerState.FADE_IN;
 		last_movement = Vector2.right;
 		nextProjectileFire = Time.time;
+		fadeStartTime = 0f;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown(KeyCode.F5))
+		if (ready)
 		{
-			SceneManager.LoadSceneAsync("main");
-		}
-		if (Input.GetKeyDown(KeyCode.F6))
-		{
-			foreach (Enemy enemy in Enemies)
+			if (state == ControllerState.FADE_IN)
 			{
-				enemy.PathTo(Player.gameObject);
-			}
-		}
-		if (Target != null)
-		{
-			RaycastHit2D pointer_location = Physics2D.Linecast(
-				WorldCamera.transform.position, 
-				(Vector2)Target.transform.position + new Vector2(16, 16),
-				LayerMask.GetMask("UI"));
-			if (pointer_location.collider == null)
-			{
-				Pointer.enabled = false;
-			} else {
-				if (pointer_location.collider.name == "Pointer_Collider_Top")
+				if (fadeStartTime != 0f)
 				{
-					Pointer.sprite = PointerSprites[0];
-				} else if (pointer_location.collider.name ==
-					"Pointer_Collider_Left")
-				{
-					Pointer.sprite = PointerSprites[1];
-				} else if (pointer_location.collider.name ==
-					"Pointer_Collider_Bottom")
-				{
-					Pointer.sprite = PointerSprites[2];
-				} else if (pointer_location.collider.name ==
-					"Pointer_Collider_Right")
-				{
-					Pointer.sprite = PointerSprites[3];
+					float fadeTime = (Time.unscaledTime - fadeStartTime);
+					Blackout.color = Color.Lerp(Color.white, Color.clear, fadeTime / 2);
+					if (fadeTime >= 2)
+					{
+						state = ControllerState.RUNNING;
+						Time.timeScale = 1f;
+						Blackout.enabled = false;
+						fadeStartTime = 0f;
+					}
+				} else {
+					fadeStartTime = Time.unscaledTime;
 				}
-				Pointer.enabled = true;
-				Pointer.transform.position = pointer_location.point;
 			}
+			if (state == ControllerState.WIN || state == ControllerState.LOSE)
+			{
+				if (fadeStartTime == 0f)
+					fadeStartTime = Time.unscaledTime;
+
+				float fadeTime = (Time.unscaledTime - fadeStartTime);
+				Blackout.enabled = true;
+				Blackout.color = Color.Lerp(Color.clear, Color.white, fadeTime / 2);
+				if (fadeTime >= 2)
+				{
+					SceneManager.LoadSceneAsync("main");
+					state = ControllerState.LOADING;
+				}
+			if (state == ControllerState.LOADING)
+			{
+				Blackout.color = Color.white;
+				Blackout.enabled = true;
+			}
+			}
+			if (Input.GetKeyDown(KeyCode.F5))
+			{
+				Win();
+			}
+			if (Input.GetKeyDown(KeyCode.F6))
+			{
+				foreach (Enemy enemy in Enemies)
+				{
+					enemy.PathTo(Player.gameObject);
+				}
+			}
+			if (Target != null)
+			{
+				RaycastHit2D pointer_location = Physics2D.Linecast(
+					WorldCamera.transform.position, 
+					(Vector2)Target.transform.position + new Vector2(16, 16),
+					LayerMask.GetMask("UI"));
+				if (pointer_location.collider == null)
+				{
+					Pointer.enabled = false;
+				} else {
+					if (pointer_location.collider.name == "Pointer_Collider_Top")
+					{
+						Pointer.sprite = PointerSprites[0];
+					} else if (pointer_location.collider.name ==
+						"Pointer_Collider_Left")
+					{
+						Pointer.sprite = PointerSprites[1];
+					} else if (pointer_location.collider.name ==
+						"Pointer_Collider_Bottom")
+					{
+						Pointer.sprite = PointerSprites[2];
+					} else if (pointer_location.collider.name ==
+						"Pointer_Collider_Right")
+					{
+						Pointer.sprite = PointerSprites[3];
+					}
+					Pointer.enabled = true;
+					Pointer.transform.position = pointer_location.point;
+				}
+			}
+		} else {
+			Blackout.color = Color.white;
+			Blackout.enabled = true;
 		}
 	}
 
@@ -132,7 +180,6 @@ public class GameController : MonoBehaviour {
 			state = ControllerState.LOSE;
 			Debug.Log("Womp womp");
 			Time.timeScale = 0f;
-			SceneManager.LoadSceneAsync("main");
 		}
 	}
 
@@ -143,7 +190,6 @@ public class GameController : MonoBehaviour {
 			state = ControllerState.WIN;
 			Debug.Log("Huzzah!");
 			Time.timeScale = 0f;
-			SceneManager.LoadSceneAsync("main");
 		}
 	}
 	// void OnDrawGizmos()

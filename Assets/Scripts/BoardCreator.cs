@@ -56,6 +56,7 @@ public class BoardCreator : MonoBehaviour
         CreateEntities ();
 
         Pathfinder.Scan();
+        gameController.ready = true;
     }
 
 
