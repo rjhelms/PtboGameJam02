@@ -2,6 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
+public enum ControllerState {
+    RUNNING,
+    WIN,
+    LOSE,
+    FADE_IN,
+}
+
 public class GameController : MonoBehaviour {
 
 	public PlayerEntity Player;
@@ -12,12 +20,14 @@ public class GameController : MonoBehaviour {
 	public Vector2 PlayerPosition {
 		get { return (Vector2)Player.OffsetPosition; }
 	}
+	private ControllerState state;
 	private PlayerFollower playerFollower;
 	// Use this for initialization
 	void Start () {
 		Time.timeScale = 1f;
 		playerFollower = FindObjectOfType<PlayerFollower>();
 		Debug.Log(playerFollower);
+		state = ControllerState.RUNNING;
 	}
 	
 	// Update is called once per frame
@@ -70,16 +80,24 @@ public class GameController : MonoBehaviour {
 
 	public void Lose()
 	{
-		Debug.Log("Womp womp");
-		Time.timeScale = 0f;
-		SceneManager.LoadSceneAsync("main");
+		if (state == ControllerState.RUNNING)
+		{
+			state = ControllerState.LOSE;
+			Debug.Log("Womp womp");
+			Time.timeScale = 0f;
+			SceneManager.LoadSceneAsync("main");
+		}
 	}
 
 	public void Win()
 	{
-		Debug.Log("Huzzah!");
-		Time.timeScale = 0f;
-		SceneManager.LoadSceneAsync("main");
+		if (state == ControllerState.RUNNING)
+		{
+			state = ControllerState.WIN;
+			Debug.Log("Huzzah!");
+			Time.timeScale = 0f;
+			SceneManager.LoadSceneAsync("main");
+		}
 	}
 	// void OnDrawGizmos()
 	// {
