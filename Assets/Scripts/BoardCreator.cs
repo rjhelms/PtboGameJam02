@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Pathfinding;
-
+using UnityEditor;
+using UnityEditor.SceneManagement;
 public class BoardCreator : MonoBehaviour
 {
     // The type of tile that will be laid in a specific position.
@@ -39,11 +40,20 @@ public class BoardCreator : MonoBehaviour
     private int playerY;
 	private GameController gameController;
 
+    private void Balance(int level)
+    {
+        corridorLength = new IntRange(level, 6);
+        numRooms = new IntRange((level * 4) + 3, (level * 5) + 3);
+        enemySafeDistance = new IntRange(10-level, 9-level);
+        enemyCount = new IntRange(level * 8, level * 10);
+        endTargetDistance = new IntRange(level * 5, level * 10);
+    }
     private void Start ()
     {
         // Create the board holder.
         boardHolder = new GameObject("BoardHolder");
 		gameController = FindObjectOfType<GameController>();
+        Balance(ScoreManager.Instance.Level);
         SetupTilesArray ();
 
         CreateRoomsAndCorridors ();
@@ -310,9 +320,11 @@ public class BoardCreator : MonoBehaviour
         if (TargetCandidateTiles.Count < 1)
         {
             Debug.LogWarning("no tiles for end point!!!!");
+            EditorApplication.isPaused = true;
             SceneManager.LoadScene("main");
         } else if (EnemyCandidateTiles.Count < enemy_count)
         {   
+            EditorApplication.isPaused = true;
             Debug.LogWarning("not enough candidate tiles for enemy!");
             SceneManager.LoadScene("main");
         } else {

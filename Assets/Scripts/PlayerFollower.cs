@@ -66,7 +66,7 @@ public class PlayerFollower : MonoBehaviour {
 	public void SetPlayer (PlayerEntity player)
 	{
 		Player = player;
-		world_position = player.ScreenPosition;
+		world_position = player.OffsetPosition;
 		Vector3 screen_position = new Vector3(
 							       Mathf.RoundToInt(world_position.x),
 								   Mathf.RoundToInt(world_position.y),

@@ -507,6 +507,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
+  ready: 0
   Target: {fileID: 0}
   MoveSpeed: 128
   WorldCamera: {fileID: 581069908}
@@ -523,6 +524,7 @@ MonoBehaviour:
   ProjectilePrefab: {fileID: 1498765538775582, guid: 15ff7cc20124d944d897a652b38a3220,
     type: 2}
   fadeStartTime: 0
+  scoreText: {fileID: 1427775754}
 --- !u!4 &642043607
 Transform:
   m_ObjectHideFlags: 0

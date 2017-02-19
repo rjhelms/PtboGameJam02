@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public enum ControllerState {
     RUNNING,
@@ -33,7 +34,7 @@ public class GameController : MonoBehaviour {
 	private Vector2 last_movement;
 	private float nextProjectileFire;
 	public float fadeStartTime;
-
+	public Text scoreText;
 	// Use this for initialization
 	void Start () {
 		Time.timeScale = 0f;
@@ -76,14 +77,33 @@ public class GameController : MonoBehaviour {
 				Blackout.color = Color.Lerp(Color.clear, Color.white, fadeTime / 2);
 				if (fadeTime >= 2)
 				{
-					SceneManager.LoadSceneAsync("main");
+					if (state == ControllerState.WIN)
+					{
+						ScoreManager.Instance.Level++;
+					} else
+					{
+						ScoreManager.Instance.Lives--;
+					}
+					if (ScoreManager.Instance.Level > 5)
+					{
+						SceneManager.LoadScene("win");
+					} else if (ScoreManager.Instance.Lives < 0)
+					{
+						SceneManager.LoadScene("lose");
+					} else {
+						SceneManager.LoadScene("main");
+					}
 					state = ControllerState.LOADING;
 				}
+			}
 			if (state == ControllerState.LOADING)
 			{
 				Blackout.color = Color.white;
 				Blackout.enabled = true;
 			}
+			if (state == ControllerState.RUNNING)
+			{
+				scoreText.text = "LEVEL " + ScoreManager.Instance.Level + "\nLIVES " + ScoreManager.Instance.Lives;
 			}
 			if (Input.GetKeyDown(KeyCode.F5))
 			{
