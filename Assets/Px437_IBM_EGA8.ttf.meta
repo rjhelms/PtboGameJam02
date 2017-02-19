@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 7a98217a80026544498be884512385fc
+timeCreated: 1487534010
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 56
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Px437 IBM EGA8
+  fontNames:
+  - Px437 IBM EGA8
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 3
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

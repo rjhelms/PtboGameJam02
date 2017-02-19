@@ -24,6 +24,8 @@ public class GameController : MonoBehaviour {
 	public SpriteRenderer Pointer;
 	private ControllerState state;
 	private PlayerFollower playerFollower;
+	public GameObject ProjectilePrefab;
+	private Vector2 last_movement;
 	// Use this for initialization
 	void Start () {
 		Time.timeScale = 1f;
@@ -87,6 +89,13 @@ public class GameController : MonoBehaviour {
 		float y_movement = Input.GetAxis("Vertical") * MoveSpeed; 
 		Vector2 movement = new Vector2(x_movement, y_movement);
 		Player.Move(movement);
+		if (movement.magnitude > 0)
+			last_movement = movement;
+		if (Input.GetButtonDown("Fire1"))
+		{
+			Projectile new_projectile= Instantiate(ProjectilePrefab, (Vector3)PlayerPosition, Quaternion.identity).GetComponent<Projectile>();
+			new_projectile.Initialize(last_movement);
+		}
 	}
 
 	public void RegisterPlayer (GameObject player)
