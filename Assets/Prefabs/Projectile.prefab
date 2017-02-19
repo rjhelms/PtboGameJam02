@@ -93,4 +93,4 @@ MonoBehaviour:
     type: 2}
   DirectionSprites: []
   FireVector: {x: 0, y: 0}
-  ProjectileSpeed: 200
+  ProjectileSpeed: 320

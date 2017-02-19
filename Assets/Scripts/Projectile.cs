@@ -25,7 +25,7 @@ public class Projectile : Actor {
 	{
 		if (coll.gameObject.tag == "Enemy")
 		{
-			Enemy hit_enemy = coll.gameObject.GetComponent<Enemy>();
+			Enemy hit_enemy = coll.gameObject.GetComponentInParent<Enemy>();
 			hit_enemy.Die();
 			Destroy(gameObject);
 			Destroy(EntitySprite.gameObject);

@@ -32,6 +32,7 @@ public class GameController : MonoBehaviour {
 		playerFollower = FindObjectOfType<PlayerFollower>();
 		Debug.Log(playerFollower);
 		state = ControllerState.RUNNING;
+		last_movement = Vector2.right;
 	}
 	
 	// Update is called once per frame

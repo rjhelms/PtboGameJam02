@@ -21,6 +21,8 @@ public class Enemy : Actor {
     public float IdleCheckTime = 1f;
     public float ChaseCheckTime = 3f;
     public Sprite DeadSprite;
+    public Collider2D MainCollider;
+    public Collider2D ChildCollider;
     public float ChaseRadius = 128f;
     private Seeker seeker;
     private int currentWaypoint;
@@ -195,7 +197,8 @@ public class Enemy : Actor {
     public void Die()
     {
         // disable collider, and change sprite.
-        GetComponent<Collider2D>().enabled = false;
+        MainCollider.enabled = false;
+        ChildCollider.enabled = false;
         sprite_renderer.sprite = DeadSprite;
         State = EnemyState.DEAD;
     }
