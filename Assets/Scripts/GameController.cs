@@ -74,6 +74,13 @@ public class GameController : MonoBehaviour {
 		Time.timeScale = 0f;
 		SceneManager.LoadSceneAsync("main");
 	}
+
+	public void Win()
+	{
+		Debug.Log("Huzzah!");
+		Time.timeScale = 0f;
+		SceneManager.LoadSceneAsync("main");
+	}
 	// void OnDrawGizmos()
 	// {
 	// 	Gizmos.color = Color.red;

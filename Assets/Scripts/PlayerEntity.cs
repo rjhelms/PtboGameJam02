@@ -21,4 +21,12 @@ public class PlayerEntity : Actor
         cameraTarget = screenPosition + screenPositionOffset 
                            + cameraTargetOffset;
     }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == ("Finish"))
+        {
+            FindObjectOfType<GameController>().Win();
+        }
+    }
 }
