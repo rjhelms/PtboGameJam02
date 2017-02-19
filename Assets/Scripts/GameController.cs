@@ -22,10 +22,13 @@ public class GameController : MonoBehaviour {
 	}
 	public Sprite[] PointerSprites;
 	public SpriteRenderer Pointer;
+	public float ProjectileFireTime = 0.2f;
 	private ControllerState state;
 	private PlayerFollower playerFollower;
 	public GameObject ProjectilePrefab;
 	private Vector2 last_movement;
+	private float nextProjectileFire;
+
 	// Use this for initialization
 	void Start () {
 		Time.timeScale = 1f;
@@ -33,6 +36,7 @@ public class GameController : MonoBehaviour {
 		Debug.Log(playerFollower);
 		state = ControllerState.RUNNING;
 		last_movement = Vector2.right;
+		nextProjectileFire = Time.time;
 	}
 	
 	// Update is called once per frame
@@ -92,10 +96,11 @@ public class GameController : MonoBehaviour {
 		Player.Move(movement);
 		if (movement.magnitude > 0)
 			last_movement = movement;
-		if (Input.GetButtonDown("Fire1"))
+		if (Input.GetButton("Fire1") & Time.time > nextProjectileFire)
 		{
 			Projectile new_projectile= Instantiate(ProjectilePrefab, (Vector3)PlayerPosition, Quaternion.identity).GetComponent<Projectile>();
 			new_projectile.Initialize(last_movement);
+			nextProjectileFire = Time.time + ProjectileFireTime;
 		}
 	}
 
