@@ -14,6 +14,10 @@ public class BaseEntity : MonoBehaviour {
 	{
 		get { return screenPosition; }
 	}
+	public Vector2 OffsetPosition
+	{
+		get { return (Vector2)transform.position + screenPositionOffset;}
+	}
 	public GameObject ScreenPrefab;
 	// Use this for initialization
 	protected virtual void Start () {

@@ -9,6 +9,9 @@ public class GameController : MonoBehaviour {
 	public float MoveSpeed = 120.0f;
 	public Camera WorldCamera;
 	public List<Enemy> Enemies;
+	public Vector2 PlayerPosition {
+		get { return (Vector2)Player.OffsetPosition; }
+	}
 	private PlayerFollower playerFollower;
 	// Use this for initialization
 	void Start () {

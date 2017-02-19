@@ -21,12 +21,14 @@ public class Enemy : Actor {
     public float IdleCheckTime = 1f;
     public float ChaseCheckTime = 3f;
     public Sprite DeadSprite;
+    public float ChaseRadius = 128f;
     private Seeker seeker;
     private int currentWaypoint;
 
     private List<GameObject> collisionsToResolve = new List<GameObject>();
     private float collisionStallTimer = 0f;
     private float nextCheck;
+    private GameController controller;
     protected override void Start()
     {
         base.Start();
@@ -39,20 +41,29 @@ public class Enemy : Actor {
         switch (State)
         {
             case EnemyState.IDLE:
-                if (path == null) {
-                    SetIdleTarget();
+                if (Time.time > nextCheck)
+                {
+                    IdleCheck();
                 }
-                else if (currentWaypoint > path.vectorPath.Count) {
-                    path = null;
-                } else if (currentWaypoint == path.vectorPath.Count) {
-                    path = null;
-                    currentWaypoint++;
-                } else {
-                    Vector3 dir = (path.vectorPath[currentWaypoint]
-                                   - transform.position).normalized;
-                    dir *= IdleMoveSpeed;
-                    moveVector = (Vector2)dir;
+                // if we're still idle after that check...
+                if (State == EnemyState.IDLE)
+                {
+                    if (path == null) {
+                        SetIdleTarget();
+                    }
+                    else if (currentWaypoint > path.vectorPath.Count) {
+                        path = null;
+                    } else if (currentWaypoint == path.vectorPath.Count) {
+                        path = null;
+                        currentWaypoint++;
+                    } else {
+                        Vector3 dir = (path.vectorPath[currentWaypoint]
+                                    - transform.position).normalized;
+                        dir *= IdleMoveSpeed;
+                        moveVector = (Vector2)dir;
+                    }
                 }
+                
                 break;
             case EnemyState.CHASE:
                 break;
@@ -109,11 +120,32 @@ public class Enemy : Actor {
         }
     }
 
+    void IdleCheck()
+    {
+        Vector2 vectorToPlayer = controller.PlayerPosition - 
+                                     (Vector2)transform.position;
+        if (vectorToPlayer.magnitude < ChaseRadius)
+        {
+            State = EnemyState.CHASE;
+        } else {
+            RaycastHit2D hit = Physics2D.Raycast(
+                (Vector2)transform.position, vectorToPlayer, 
+                vectorToPlayer.magnitude, LayerMask.GetMask("Player",
+                    "Terrain"));
+            if (hit.collider.tag == "Player")
+            {
+                Debug.Log("Have line of sight!");
+                State = EnemyState.CHASE;
+            }
+
+        }
+    }
     public override void Initialize()
     {
         base.Initialize();
         State = EnemyState.IDLE;
         nextCheck = Time.fixedTime + IdleCheckTime;
+        controller = FindObjectOfType<GameController>();
     }
 
     public void InvalidatePath()
@@ -139,11 +171,14 @@ public class Enemy : Actor {
                 // both idle - just force repathing
                 InvalidatePath();
                 other.InvalidatePath();
+            } else {
+                Die();
+                other.Die();
             }
             collisionsToResolve.Add(coll.gameObject);
         } else if (coll.gameObject.tag == "Player")
         {
-            FindObjectOfType<GameController>().Lose();
+            controller.Lose();
         }
 
     }
@@ -166,5 +201,17 @@ public class Enemy : Actor {
         {
             collisionStallTimer = 0f;
         }
+    }
+
+    void OnDrawGizmos()
+    {
+		Gizmos.color = Color.blue;
+		Vector3 vectorToTarget = controller.PlayerPosition 
+                                     - (Vector2)transform.position;
+        Gizmos.DrawRay(transform.position, vectorToTarget);
+        Gizmos.color = Color.red;
+        vectorToTarget.Normalize();
+        vectorToTarget *= ChaseRadius;
+		Gizmos.DrawRay(transform.position, vectorToTarget);
     }
 }
