@@ -16,6 +16,9 @@ public class PlayerEntity : Actor
     public override void Move(Vector2 move_vector)
     {
         base.Move(move_vector);
-        cameraTarget = screenPosition + (move_vector * CameraLookAheadFactor);
+        Vector2 cameraTargetOffset = GetComponent<Rigidbody2D>().velocity * CameraLookAheadFactor;
+        // cameraTargetOffset.y /= 1.5f;
+        cameraTarget = screenPosition + screenPositionOffset 
+                           + cameraTargetOffset;
     }
 }

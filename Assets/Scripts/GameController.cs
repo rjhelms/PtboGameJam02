@@ -24,9 +24,9 @@ public class GameController : MonoBehaviour {
 
 	void DoMovement() {
 		float x_movement = Input.GetAxis("Horizontal") * MoveSpeed;
-		float y_movement = Input.GetAxis("Vertical") * MoveSpeed;
-		Vector2 movement = new Vector2(x_movement, y_movement)
-						   		* Time.fixedDeltaTime;
+			// fudge aspect ratio correction for movement
+		float y_movement = Input.GetAxis("Vertical") * MoveSpeed / 1.2f; 
+		Vector2 movement = new Vector2(x_movement, y_movement);
 		Player.Move(movement);
 	}
 

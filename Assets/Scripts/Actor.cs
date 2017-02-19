@@ -7,7 +7,10 @@ public class Actor : BaseEntity {
 	public Sprite[] DirectionSprites;
 	private SpriteRenderer sprite_renderer;
 	private float slice_angle;
+
 	private Vector2[] rotation_vectors;
+
+	public Collider2D actorCollider;
 
 	// Update is called once per frame
 	protected override void Update () {
@@ -28,11 +31,12 @@ public class Actor : BaseEntity {
 		if (target_sprite_index > -1) {
 			sprite_renderer.sprite = DirectionSprites[target_sprite_index];
 		}
-		worldPosition += move_vector;
+		GetComponent<Rigidbody2D>().velocity = move_vector;
 	}
 
 	public override void Initialize()
 	{
+		base.Initialize();
 		slice_angle = Mathf.Cos(Mathf.Deg2Rad * 22.5f);
 		rotation_vectors = new Vector2[8];
 		rotation_vectors[0] = Vector2.up;
@@ -43,8 +47,9 @@ public class Actor : BaseEntity {
 		rotation_vectors[5] = (-Vector2.up + Vector2.right).normalized;
 		rotation_vectors[6] = Vector2.right;
 		rotation_vectors[7] = (Vector2.up + Vector2.right).normalized;
-		sprite_renderer = GetComponent<SpriteRenderer>();
-		base.Initialize();
+		sprite_renderer = EntitySprite.GetComponent<SpriteRenderer>();
+		actorCollider = GetComponent<Collider2D>();
+		Debug.Log(actorCollider);
 	}
 
 }

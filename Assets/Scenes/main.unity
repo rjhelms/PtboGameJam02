@@ -255,7 +255,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
   CameraZOffset: -10
-  LerpSpeed: 1.5
+  LerpSpeed: 0.5
+  world_position: {x: 0, y: 0}
 --- !u!1 &642043605
 GameObject:
   m_ObjectHideFlags: 0
@@ -284,7 +285,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
-  MoveSpeed: 120
+  MoveSpeed: 128
 --- !u!4 &642043607
 Transform:
   m_ObjectHideFlags: 0
