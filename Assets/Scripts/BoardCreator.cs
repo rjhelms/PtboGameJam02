@@ -25,6 +25,7 @@ public class BoardCreator : MonoBehaviour
     public GameObject[] outerWallTiles;                       // An array of outer wall tile prefabs.
     public GameObject player;
     public GameObject endTarget;
+    public GameObject[] enemies;
 	public int GridX = 32;
 	public int GridY = 32;
     public AstarPath Pathfinder;
@@ -297,18 +298,30 @@ public class BoardCreator : MonoBehaviour
             }
         }
 
-        if (Candidates.Count == 0)
+        if (Candidates.Count < 2)
         {
             Debug.LogWarning("no tiles for end point!!!!");
             SceneManager.LoadScene("main");
         } else {
-            int endTargetIndex = Random.Range(0, Candidates.Count - 1);
-            GameObject target = Instantiate(endTarget,
-                       new Vector3(Candidates[endTargetIndex][0] * GridX,
-                                   Candidates[endTargetIndex][1] * GridY,
-                                   0),
-                       Quaternion.identity);
+            int randomIndex = Random.Range(0, Candidates.Count - 1);
+            int[] endTargetLocation = Candidates[randomIndex];
+            GameObject target = Instantiate(
+                endTarget, new Vector3(endTargetLocation[0] * GridX,
+                                       endTargetLocation[1] * GridY,
+                                       0),
+                Quaternion.identity);
             gameController.RegisterTarget(target);
+            Candidates.RemoveAt(randomIndex);
+            
+            // instantiate enemy for shits
+            randomIndex = Random.Range(0, Candidates.Count - 1);
+            int[] enemyLocation = Candidates[randomIndex];
+            randomIndex = Random.Range(0, enemies.Length);
+            GameObject enemy = Instantiate(
+                enemies[randomIndex], new Vector3(enemyLocation[0] * GridX,
+                                                  enemyLocation[1] * GridY,
+                                                  0),
+                Quaternion.identity);
         }
     }
 }

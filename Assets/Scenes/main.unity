@@ -143,6 +143,8 @@ MonoBehaviour:
   - {fileID: 1779993801410326, guid: d13fc02ef8cb8174a8128432700354b7, type: 2}
   player: {fileID: 1152278931452028, guid: 0303b61d487393f4897ae4cf274bd313, type: 2}
   endTarget: {fileID: 1971042499702278, guid: a41541fa023272e428eda896a4839579, type: 2}
+  enemies:
+  - {fileID: 1836620847569092, guid: 6400de35061c0e14c929b599e5de217f, type: 2}
   GridX: 32
   GridY: 32
   Pathfinder: {fileID: 2081219978}
