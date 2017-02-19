@@ -14,7 +14,7 @@ public class Actor : BaseEntity {
 		base.Update();
 	}
 
-	public void Move(Vector2 move_vector)
+	public virtual void Move(Vector2 move_vector)
 	{
 		Vector2 normal_move = move_vector.normalized;
 		int target_sprite_index = -1;
@@ -25,10 +25,7 @@ public class Actor : BaseEntity {
 				target_sprite_index = i;
 			}
 		}
-		if (target_sprite_index == -1)
-		{
-			Debug.Log("fell through sprite cases" + move_vector);
-		} else {
+		if (target_sprite_index > -1) {
 			sprite_renderer.sprite = DirectionSprites[target_sprite_index];
 		}
 		worldPosition += move_vector;

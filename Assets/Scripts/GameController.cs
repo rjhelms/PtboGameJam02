@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour {
 
-	public Actor Player;
+	public PlayerEntity Player;
 	public float MoveSpeed = 120.0f;
 
 	private PlayerFollower playerFollower;
@@ -16,27 +16,23 @@ public class GameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		DoMovement();
 	}
 
 	void FixedUpdate () {
+		DoMovement();
 	}
 
 	void DoMovement() {
 		float x_movement = Input.GetAxis("Horizontal") * MoveSpeed;
 		float y_movement = Input.GetAxis("Vertical") * MoveSpeed;
 		Vector2 movement = new Vector2(x_movement, y_movement)
-						   		* Time.deltaTime;
-
-		if (movement.magnitude > 0)
-		{
-			Player.Move(movement);
-		}
+						   		* Time.fixedDeltaTime;
+		Player.Move(movement);
 	}
 
 	public void RegisterPlayer (GameObject player)
 	{
-		Player = player.GetComponent<Actor>();
+		Player = player.GetComponent<PlayerEntity>();
 		Player.Initialize();
 		Debug.Log(Player);
 		playerFollower.SetPlayer(Player);

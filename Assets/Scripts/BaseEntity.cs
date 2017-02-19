@@ -11,10 +11,14 @@ public class BaseEntity : MonoBehaviour {
 	protected Vector2 screenPositionOffset;
 	public Vector2 WorldPosition
 	{
-		get { return worldPosition;}
-		set { worldPosition = value;}
+		get { return worldPosition; }
+		set { worldPosition = value; }
 	}
 
+	public Vector2 ScreenPosition
+	{
+		get { return screenPosition; }
+	}
 	// Use this for initialization
 	protected virtual void Start () {
 		Initialize();
@@ -30,5 +34,6 @@ public class BaseEntity : MonoBehaviour {
 	public virtual void Initialize()
 	{
 		worldPosition = (Vector2)transform.position;
+		screenPosition = worldPosition;
 	}
 }

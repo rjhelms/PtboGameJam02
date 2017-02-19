@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class PlayerFollower : MonoBehaviour {
 
-	public Actor Player;
+	private Vector2 velocity;
+	public PlayerEntity Player;
 	public float CameraZOffset = -10f;
 	public float LerpSpeed = 1f;
 
+	[SerializeField]
 	private Vector2 world_position;
 	// Use this for initialization
 	void Start () {
@@ -16,25 +18,24 @@ public class PlayerFollower : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		world_position = Vector2.Lerp(
-						     world_position, 
-							 Player.WorldPosition, 
-							 Time.deltaTime * LerpSpeed);
-		Vector3 new_position = new Vector3(
+		world_position = Vector2.SmoothDamp(world_position, Player.CameraTarget,
+											ref velocity, LerpSpeed,
+											Mathf.Infinity, Time.deltaTime);
+		Vector3 screen_position = new Vector3(
 							       Mathf.RoundToInt(world_position.x),
 								   Mathf.RoundToInt(world_position.y),
 								   CameraZOffset);
-		transform.position = new_position;
+		transform.position = screen_position;
 	}
 
-	public void SetPlayer (Actor player)
+	public void SetPlayer (PlayerEntity player)
 	{
 		Player = player;
-		world_position = player.WorldPosition;
-		Vector3 new_position = new Vector3(
+		world_position = player.ScreenPosition;
+		Vector3 screen_position = new Vector3(
 							       Mathf.RoundToInt(world_position.x),
 								   Mathf.RoundToInt(world_position.y),
 								   CameraZOffset);
-		transform.position = new_position;
+		transform.position = screen_position;
 	}
 }
