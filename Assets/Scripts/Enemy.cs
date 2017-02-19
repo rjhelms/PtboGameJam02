@@ -5,24 +5,28 @@ using Pathfinding;
 
 public enum EnemyState {
     IDLE,
-    CHASING,
+    CHASE,
     DEAD
 }
 
 public class Enemy : Actor {
 
-    public float MoveSpeed = 128f;
+    public float IdleMoveSpeed = 96f;
+    public float ChaseMoveSpeed = 128f;
     public Path path;
     public float nextWaypointDistance = 16f;
     public float IdlePathingTargetDistance = 320f;
     public EnemyState State;
     public float CollisionStallTime = 1f;
+    public float IdleCheckTime = 1f;
+    public float ChaseCheckTime = 3f;
     public Sprite DeadSprite;
     private Seeker seeker;
     private int currentWaypoint;
 
     private List<GameObject> collisionsToResolve = new List<GameObject>();
     private float collisionStallTimer = 0f;
+    private float nextCheck;
     protected override void Start()
     {
         base.Start();
@@ -31,30 +35,38 @@ public class Enemy : Actor {
 
     void FixedUpdate()
     {
-        if (path == null) {
-            Move(Vector2.zero);
-            if (State == EnemyState.IDLE)
-            {
-                SetIdleTarget();
+        Vector2 moveVector = Vector2.zero;
+        switch (State)
+        {
+            case EnemyState.IDLE:
+                if (path == null) {
+                    SetIdleTarget();
+                }
+                else if (currentWaypoint > path.vectorPath.Count) {
+                    path = null;
+                } else if (currentWaypoint == path.vectorPath.Count) {
+                    path = null;
+                    currentWaypoint++;
+                } else {
+                    Vector3 dir = (path.vectorPath[currentWaypoint]
+                                   - transform.position).normalized;
+                    dir *= IdleMoveSpeed;
+                    moveVector = (Vector2)dir;
+                }
+                break;
+            case EnemyState.CHASE:
+                break;
+            default:
+                break;
+        }
+
+        Move(moveVector);
+        if (path != null)
+        {
+            if ((transform.position - path.vectorPath[currentWaypoint])
+                 .sqrMagnitude < nextWaypointDistance*nextWaypointDistance) {
+                currentWaypoint++;
             }
-            return;
-        }
-        if (currentWaypoint > path.vectorPath.Count) return;
-        if (currentWaypoint == path.vectorPath.Count) {
-            path = null;
-            currentWaypoint++;
-            Move(Vector2.zero);
-            return;
-        }
-        Vector3 dir = (path.vectorPath[currentWaypoint]
-                       - transform.position).normalized;
-        dir *= MoveSpeed;
-        Move((Vector2)dir);
-        if ((transform.position - path.vectorPath[currentWaypoint])
-                 .sqrMagnitude
-             < nextWaypointDistance*nextWaypointDistance) {
-            currentWaypoint++;
-            return;
         }
     }
 
@@ -89,6 +101,11 @@ public class Enemy : Actor {
             // Reset the waypoint counter so that we start to move towards 
             // the first point in the path
             currentWaypoint = 0;
+
+            if (State == EnemyState.IDLE)
+            {
+                nextCheck = Time.time + IdleCheckTime;
+            }
         }
     }
 
@@ -96,6 +113,7 @@ public class Enemy : Actor {
     {
         base.Initialize();
         State = EnemyState.IDLE;
+        nextCheck = Time.fixedTime + IdleCheckTime;
     }
 
     public void InvalidatePath()
