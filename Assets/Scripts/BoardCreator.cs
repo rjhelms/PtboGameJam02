@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class BoardCreator : MonoBehaviour
 {
     // The type of tile that will be laid in a specific position.
@@ -294,14 +294,16 @@ public class BoardCreator : MonoBehaviour
 
         if (Candidates.Count == 0)
         {
-            Debug.LogError("no tiles for end point!!!!");
+            Debug.LogWarning("no tiles for end point!!!!");
+            SceneManager.LoadScene("main");
         } else {
             int endTargetIndex = Random.Range(0, Candidates.Count - 1);
-            Instantiate(endTarget,
+            GameObject target = Instantiate(endTarget,
                        new Vector3(Candidates[endTargetIndex][0] * GridX,
                                    Candidates[endTargetIndex][1] * GridY,
                                    0),
                        Quaternion.identity);
+            gameController.RegisterTarget(target);
         }
     }
 }

@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour {
 
 	public PlayerEntity Player;
+	public GameObject Target;
 	public float MoveSpeed = 120.0f;
+	public Camera WorldCamera;
 
 	private PlayerFollower playerFollower;
 	// Use this for initialization
@@ -16,6 +18,10 @@ public class GameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (Input.GetKeyDown(KeyCode.F5))
+		{
+			SceneManager.LoadScene("main");
+		}
 	}
 
 	void FixedUpdate () {
@@ -36,5 +42,17 @@ public class GameController : MonoBehaviour {
 		Player.Initialize();
 		Debug.Log(Player);
 		playerFollower.SetPlayer(Player);
+	}
+
+	public void RegisterTarget (GameObject target)
+	{
+		Target = target;
+	}
+
+	void OnDrawGizmos()
+	{
+		Gizmos.color = Color.red;
+		Vector3 vectorToTarget = (Target.transform.position - WorldCamera.transform.position);
+		Gizmos.DrawRay(WorldCamera.transform.position, vectorToTarget);
 	}
 }
