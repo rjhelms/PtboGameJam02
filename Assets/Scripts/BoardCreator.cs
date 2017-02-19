@@ -16,18 +16,22 @@ public class BoardCreator : MonoBehaviour
     public IntRange roomWidth = new IntRange (3, 10);         // The range of widths rooms can have.
     public IntRange roomHeight = new IntRange (3, 10);        // The range of heights rooms can have.
     public IntRange corridorLength = new IntRange (6, 10);    // The range of lengths corridors between rooms can have.
+    public IntRange endTargetDistance = new IntRange(15, 20);
     public GameObject[] floorTiles;                           // An array of floor tile prefabs.
     public GameObject[] wallTiles;                            // An array of wall tile prefabs.
     public GameObject[] outerWallTiles;                       // An array of outer wall tile prefabs.
     public GameObject player;
+    public GameObject endTarget;
 	public int GridX = 32;
 	public int GridY = 32;
     private TileType[][] tiles;                               // A jagged array of tile types representing the board, like a grid.
     private Room[] rooms;                                     // All the rooms that are created for this board.
     private Corridor[] corridors;                             // All the corridors that connect the rooms.
     private GameObject boardHolder;                           // GameObject that acts as a container for all other tiles.
-
+    private int playerX;
+    private int playerY;
 	private GameController gameController;
+
     private void Start ()
     {
         // Create the board holder.
@@ -42,6 +46,7 @@ public class BoardCreator : MonoBehaviour
 
         InstantiateTiles ();
         InstantiateOuterWalls ();
+        CreateLevelEndTarget ();
     }
 
 
@@ -97,7 +102,10 @@ public class BoardCreator : MonoBehaviour
             
             if (i == Mathf.RoundToInt(rooms.Length *.5f))
             {
-                Vector3 playerPos = new Vector3 (rooms[i].xPos * GridX, rooms[i].yPos * GridY, 0);
+                playerX = rooms[i].xPos;
+                playerY = rooms[i].yPos;
+                Vector3 playerPos = new Vector3 (playerX * GridX,
+                                                 playerY * GridY, 0);
                 GameObject playerObject = Instantiate(player, playerPos, Quaternion.identity);
 				gameController.RegisterPlayer(playerObject);
 				Debug.Log("Making player");
@@ -258,5 +266,28 @@ public class BoardCreator : MonoBehaviour
 
         // Set the tile's parent to the board holder.
         tileInstance.transform.parent = boardHolder.transform;
+    }
+
+    void CreateLevelEndTarget ()
+    {
+        int random_distance = endTargetDistance.Random;
+        Debug.Log("Creating end target " + random_distance 
+                  + " units away from player.");
+        for (int i = 0; i < tiles.Length; i++)
+        {
+            for (int j = 0; j < tiles[i].Length; j++)
+            {
+                if (tiles[i][j] == TileType.Floor)
+                {
+                    int tile_distance = Mathf.Abs(i - playerX) + Mathf.Abs(j - playerY);
+                    if (tile_distance == random_distance)
+                    {
+                        Instantiate(endTarget, 
+                                    new Vector3(i * GridX, j * GridY, 0),
+                                    Quaternion.identity);
+                    }
+                }
+            }
+        }
     }
 }

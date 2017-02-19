@@ -10,8 +10,6 @@ public class Actor : BaseEntity {
 
 	private Vector2[] rotation_vectors;
 
-	public Collider2D actorCollider;
-
 	// Update is called once per frame
 	protected override void Update () {
 		base.Update();
@@ -48,8 +46,6 @@ public class Actor : BaseEntity {
 		rotation_vectors[6] = Vector2.right;
 		rotation_vectors[7] = (Vector2.up + Vector2.right).normalized;
 		sprite_renderer = EntitySprite.GetComponent<SpriteRenderer>();
-		actorCollider = GetComponent<Collider2D>();
-		Debug.Log(actorCollider);
 	}
 
 }

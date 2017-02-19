@@ -132,6 +132,9 @@ MonoBehaviour:
   corridorLength:
     m_Min: 0
     m_Max: 6
+  endTargetDistance:
+    m_Min: 15
+    m_Max: 20
   floorTiles:
   - {fileID: 1016174696619842, guid: 2970df403c2881048ad5e4b6f81baac2, type: 2}
   wallTiles:
@@ -139,6 +142,7 @@ MonoBehaviour:
   outerWallTiles:
   - {fileID: 1779993801410326, guid: d13fc02ef8cb8174a8128432700354b7, type: 2}
   player: {fileID: 1152278931452028, guid: 0303b61d487393f4897ae4cf274bd313, type: 2}
+  endTarget: {fileID: 1971042499702278, guid: a41541fa023272e428eda896a4839579, type: 2}
   GridX: 32
   GridY: 32
 --- !u!4 &307033842
