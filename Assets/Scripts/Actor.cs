@@ -5,7 +5,7 @@ using UnityEngine;
 public class Actor : BaseEntity {
 
 	public Sprite[] DirectionSprites;
-	private SpriteRenderer sprite_renderer;
+	protected SpriteRenderer sprite_renderer;
 	private float slice_angle;
 
 	private Vector2[] rotation_vectors;

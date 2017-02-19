@@ -17,6 +17,7 @@ public class Enemy : Actor {
     public float IdlePathingTargetDistance = 320f;
     public EnemyState State;
     public float CollisionStallTime = 1f;
+    public Sprite DeadSprite;
     private Seeker seeker;
     private int currentWaypoint;
 
@@ -103,6 +104,13 @@ public class Enemy : Actor {
         collisionStallTimer = 0f;
     }
 
+    public void Die()
+    {
+        // disable collider, and change sprite.
+        GetComponent<Collider2D>().enabled = false;
+        sprite_renderer.sprite = DeadSprite;
+        State = EnemyState.DEAD;
+    }
     void OnCollisionEnter2D(Collision2D coll)
     {
         if (coll.gameObject.tag == "Enemy")
@@ -116,6 +124,7 @@ public class Enemy : Actor {
             }
             collisionsToResolve.Add(coll.gameObject);
         }
+
     }
 
     void OnCollisionStay2D(Collision2D coll)
