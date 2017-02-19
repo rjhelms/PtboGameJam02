@@ -102,7 +102,9 @@ MonoBehaviour:
   - {fileID: 21300012, guid: c22107c4af937184ebfd2f3b8929b392, type: 3}
   - {fileID: 21300010, guid: c22107c4af937184ebfd2f3b8929b392, type: 3}
   MoveSpeed: 128
-  nextWaypointDistance: 3
+  nextWaypointDistance: 16
+  IdlePathingTargetDistance: 320
+  state: 0
 --- !u!114 &114550100091208258
 MonoBehaviour:
   m_ObjectHideFlags: 1
