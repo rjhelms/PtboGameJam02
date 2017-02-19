@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Pathfinding;
+
 public class BoardCreator : MonoBehaviour
 {
     // The type of tile that will be laid in a specific position.
@@ -25,6 +27,7 @@ public class BoardCreator : MonoBehaviour
     public GameObject endTarget;
 	public int GridX = 32;
 	public int GridY = 32;
+    public AstarPath Pathfinder;
     private TileType[][] tiles;                               // A jagged array of tile types representing the board, like a grid.
     private Room[] rooms;                                     // All the rooms that are created for this board.
     private Corridor[] corridors;                             // All the corridors that connect the rooms.
@@ -48,6 +51,8 @@ public class BoardCreator : MonoBehaviour
         InstantiateTiles ();
         InstantiateOuterWalls ();
         CreateLevelEndTarget ();
+
+        Pathfinder.Scan();
     }
 
 
@@ -264,7 +269,7 @@ public class BoardCreator : MonoBehaviour
 
         // Create an instance of the prefab from the random index of the array.
         GameObject tileInstance = Instantiate(prefabs[randomIndex], position, Quaternion.identity) as GameObject;
-
+        tileInstance.GetComponent<StaticEntity>().Initialize();
         // Set the tile's parent to the board holder.
         tileInstance.transform.parent = boardHolder.transform;
     }

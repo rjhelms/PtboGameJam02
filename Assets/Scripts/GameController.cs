@@ -49,10 +49,10 @@ public class GameController : MonoBehaviour {
 		Target = target;
 	}
 
-	void OnDrawGizmos()
-	{
-		Gizmos.color = Color.red;
-		Vector3 vectorToTarget = (Target.transform.position - WorldCamera.transform.position);
-		Gizmos.DrawRay(WorldCamera.transform.position, vectorToTarget);
-	}
+	// void OnDrawGizmos()
+	// {
+	// 	Gizmos.color = Color.red;
+	// 	Vector3 vectorToTarget = (Target.transform.position - WorldCamera.transform.position);
+	// 	Gizmos.DrawRay(WorldCamera.transform.position, vectorToTarget);
+	// }
 }
