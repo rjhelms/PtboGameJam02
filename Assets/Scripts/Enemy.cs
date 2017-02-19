@@ -43,7 +43,7 @@ public class Enemy : Actor {
             case EnemyState.IDLE:
                 if (Time.time > nextCheck)
                 {
-                    IdleCheck();
+                    ChaseCheck();
                 }
                 // if we're still idle after that check...
                 if (State == EnemyState.IDLE)
@@ -66,13 +66,36 @@ public class Enemy : Actor {
                 
                 break;
             case EnemyState.CHASE:
+                if (Time.time > nextCheck)
+                {
+                    ChaseCheck();
+                }
+                // if we're still chasing
+                if (State == EnemyState.CHASE)
+                {
+                    // if we've hit the end of the path, chase check again
+                    if (path == null) {
+                        ChaseCheck();
+                    }
+                    else if (currentWaypoint > path.vectorPath.Count) {
+                        path = null;
+                    } else if (currentWaypoint == path.vectorPath.Count) {
+                        path = null;
+                        currentWaypoint++;
+                    } else {
+                        Vector3 dir = (path.vectorPath[currentWaypoint]
+                                    - transform.position).normalized;
+                        dir *= ChaseMoveSpeed;
+                        moveVector = (Vector2)dir;
+                    }
+                }
                 break;
             default:
                 break;
         }
 
         Move(moveVector);
-        if (path != null)
+        if (path != null & State != EnemyState.DEAD)
         {
             if ((transform.position - path.vectorPath[currentWaypoint])
                  .sqrMagnitude < nextWaypointDistance*nextWaypointDistance) {
@@ -90,6 +113,14 @@ public class Enemy : Actor {
             target_direction *= IdlePathingTargetDistance;
             Vector3 target_point = transform.position + (Vector3)target_direction;
             PathTo(target_point);
+        }
+    }
+
+    private void SetChaseTarget()
+    {
+        if(seeker.IsDone())
+        {
+            PathTo(controller.PlayerPosition);
         }
     }
 
@@ -120,13 +151,15 @@ public class Enemy : Actor {
         }
     }
 
-    void IdleCheck()
+    void ChaseCheck()
     {
         Vector2 vectorToPlayer = controller.PlayerPosition - 
                                      (Vector2)transform.position;
         if (vectorToPlayer.magnitude < ChaseRadius)
         {
             State = EnemyState.CHASE;
+            nextCheck = Time.time + ChaseCheckTime;
+            SetChaseTarget();
         } else {
             RaycastHit2D hit = Physics2D.Raycast(
                 (Vector2)transform.position, vectorToPlayer, 
@@ -136,8 +169,13 @@ public class Enemy : Actor {
             {
                 Debug.Log("Have line of sight!");
                 State = EnemyState.CHASE;
+                nextCheck = Time.time + ChaseCheckTime;
+                SetChaseTarget();
+            } else {
+                State = EnemyState.IDLE;
+                nextCheck = Time.time + IdleCheckTime;
+                SetIdleTarget();
             }
-
         }
     }
     public override void Initialize()

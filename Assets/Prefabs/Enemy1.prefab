@@ -102,7 +102,7 @@ MonoBehaviour:
   - {fileID: 21300012, guid: c22107c4af937184ebfd2f3b8929b392, type: 3}
   - {fileID: 21300010, guid: c22107c4af937184ebfd2f3b8929b392, type: 3}
   IdleMoveSpeed: 96
-  ChaseMoveSpeed: 128
+  ChaseMoveSpeed: 160
   nextWaypointDistance: 16
   IdlePathingTargetDistance: 320
   State: 0
