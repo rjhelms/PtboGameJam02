@@ -322,6 +322,7 @@ public class BoardCreator : MonoBehaviour
                                                   enemyLocation[1] * GridY,
                                                   0),
                 Quaternion.identity);
+            gameController.RegisterEnemy(enemy);
         }
     }
 }

@@ -295,6 +295,7 @@ MonoBehaviour:
   Target: {fileID: 0}
   MoveSpeed: 128
   WorldCamera: {fileID: 581069908}
+  Enemies: []
 --- !u!4 &642043607
 Transform:
   m_ObjectHideFlags: 0

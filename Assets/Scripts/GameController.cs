@@ -8,7 +8,7 @@ public class GameController : MonoBehaviour {
 	public GameObject Target;
 	public float MoveSpeed = 120.0f;
 	public Camera WorldCamera;
-
+	public List<Enemy> Enemies;
 	private PlayerFollower playerFollower;
 	// Use this for initialization
 	void Start () {
@@ -21,6 +21,13 @@ public class GameController : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.F5))
 		{
 			SceneManager.LoadScene("main");
+		}
+		if (Input.GetKeyDown(KeyCode.F6))
+		{
+			foreach (Enemy enemy in Enemies)
+			{
+				enemy.PathTo(Player.gameObject);
+			}
 		}
 	}
 
@@ -47,6 +54,13 @@ public class GameController : MonoBehaviour {
 	public void RegisterTarget (GameObject target)
 	{
 		Target = target;
+	}
+
+	public void RegisterEnemy (GameObject enemyGameObject)
+	{
+		Enemy enemy = enemyGameObject.GetComponent<Enemy>();
+		enemy.Initialize();
+		Enemies.Add(enemy);
 	}
 
 	// void OnDrawGizmos()
