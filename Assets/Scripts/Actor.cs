@@ -29,6 +29,7 @@ public class Actor : BaseEntity {
 		if (target_sprite_index > -1) {
 			sprite_renderer.sprite = DirectionSprites[target_sprite_index];
 		}
+		move_vector.Scale(new Vector2(1f, 0.833f));
 		GetComponent<Rigidbody2D>().velocity = move_vector;
 	}
 
