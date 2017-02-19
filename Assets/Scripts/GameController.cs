@@ -21,7 +21,7 @@ public class GameController : MonoBehaviour {
 	void Update () {
 		if (Input.GetKeyDown(KeyCode.F5))
 		{
-			SceneManager.LoadScene("main");
+			SceneManager.LoadSceneAsync("main");
 		}
 		if (Input.GetKeyDown(KeyCode.F6))
 		{
