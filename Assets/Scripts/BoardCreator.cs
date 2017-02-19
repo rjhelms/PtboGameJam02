@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Pathfinding;
-using UnityEditor;
-using UnityEditor.SceneManagement;
+
 public class BoardCreator : MonoBehaviour
 {
     // The type of tile that will be laid in a specific position.
@@ -320,11 +319,9 @@ public class BoardCreator : MonoBehaviour
         if (TargetCandidateTiles.Count < 1)
         {
             Debug.LogWarning("no tiles for end point!!!!");
-            EditorApplication.isPaused = true;
             SceneManager.LoadScene("main");
         } else if (EnemyCandidateTiles.Count < enemy_count)
         {   
-            EditorApplication.isPaused = true;
             Debug.LogWarning("not enough candidate tiles for enemy!");
             SceneManager.LoadScene("main");
         } else {
