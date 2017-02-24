@@ -169,7 +169,7 @@ public class GameController : MonoBehaviour {
 		Player.Move(movement);
 		if (movement.magnitude > 0)
 			last_movement = movement;
-		if (Input.GetButton("Fire1") & Time.time > nextProjectileFire)
+		if ((Input.GetButton("Fire1") | Input.GetButton("Fire2") | Input.GetButton("Fire3") | Input.GetButton("Jump")) & Time.time > nextProjectileFire)
 		{
 			Projectile new_projectile= Instantiate(ProjectilePrefab, (Vector3)PlayerPosition, Quaternion.identity).GetComponent<Projectile>();
 			new_projectile.Initialize(last_movement);
