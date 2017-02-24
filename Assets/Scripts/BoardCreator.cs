@@ -52,16 +52,17 @@ public class BoardCreator : MonoBehaviour
         // Create the board holder.
         boardHolder = new GameObject("BoardHolder");
 		gameController = FindObjectOfType<GameController>();
-        Balance(ScoreManager.Instance.Level);
-        SetupTilesArray ();
+
 
         bool success = false;
         while (!success)
         {
+            Balance(ScoreManager.Instance.Level);
+            SetupTilesArray();
             CreateRoomsAndCorridors();
-
             SetTilesValuesForRooms();
             SetTilesValuesForCorridors();
+
             success = CreateEntities();
         }
         InstantiateTiles ();
