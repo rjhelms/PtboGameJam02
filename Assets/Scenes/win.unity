@@ -581,6 +581,8 @@ MonoBehaviour:
   blackout: {fileID: 1250655318}
   fadeTime: 0
   blackoutColor: {r: 1, g: 1, b: 1, a: 1}
+  clearColor: {r: 1, g: 1, b: 1, a: 0}
+  currentColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!4 &1944092384
 Transform:
   m_ObjectHideFlags: 0
