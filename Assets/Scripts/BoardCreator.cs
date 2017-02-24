@@ -55,14 +55,18 @@ public class BoardCreator : MonoBehaviour
         Balance(ScoreManager.Instance.Level);
         SetupTilesArray ();
 
-        CreateRoomsAndCorridors ();
+        bool success = false;
+        while (!success)
+        {
+            CreateRoomsAndCorridors();
 
-        SetTilesValuesForRooms ();
-        SetTilesValuesForCorridors ();
-
+            SetTilesValuesForRooms();
+            SetTilesValuesForCorridors();
+            success = CreateEntities();
+        }
         InstantiateTiles ();
         InstantiateOuterWalls ();
-        CreateEntities ();
+        
 
         Pathfinder.Scan();
         gameController.ready = true;
@@ -287,7 +291,7 @@ public class BoardCreator : MonoBehaviour
         tileInstance.transform.parent = boardHolder.transform;
     }
 
-    void CreateEntities ()
+    bool CreateEntities ()
     {
         int target_distance = endTargetDistance.Random;
         int enemy_safe_distance = enemySafeDistance.Random;
@@ -319,11 +323,11 @@ public class BoardCreator : MonoBehaviour
         if (TargetCandidateTiles.Count < 1)
         {
             Debug.LogWarning("no tiles for end point!!!!");
-            SceneManager.LoadScene("main");
+            return false;
         } else if (EnemyCandidateTiles.Count < enemy_count)
         {   
             Debug.LogWarning("not enough candidate tiles for enemy!");
-            SceneManager.LoadScene("main");
+            return false;
         } else {
             // spawn target
             int target_tile = Random.Range(0, TargetCandidateTiles.Count - 1);
@@ -350,6 +354,7 @@ public class BoardCreator : MonoBehaviour
                 gameController.RegisterEnemy(enemy);
                 EnemyCandidateTiles.RemoveAt(target_tile);
             }
+            return true;
         }
     }
 }
