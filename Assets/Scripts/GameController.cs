@@ -44,7 +44,8 @@ public class GameController : MonoBehaviour {
 		last_movement = Vector2.right;
 		nextProjectileFire = Time.time;
 		fadeStartTime = 0f;
-	}
+        scoreText.text = " LEVEL " + ScoreManager.Instance.Level + "\n LIVES " + ScoreManager.Instance.Lives;
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -103,7 +104,7 @@ public class GameController : MonoBehaviour {
 			}
 			if (state == ControllerState.RUNNING)
 			{
-				scoreText.text = "LEVEL " + ScoreManager.Instance.Level + "\nLIVES " + ScoreManager.Instance.Lives;
+				scoreText.text = " LEVEL " + ScoreManager.Instance.Level + "\n LIVES " + ScoreManager.Instance.Lives;
 			}
 			if (Input.GetKeyDown(KeyCode.F5))
 			{
