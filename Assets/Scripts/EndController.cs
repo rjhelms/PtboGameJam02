@@ -9,7 +9,9 @@ public class EndController : MonoBehaviour {
     public Color blackoutColor;
     public Color clearColor;
     public Color currentColor;
-	// Use this for initialization
+    public int sceneIndex = 0;
+
+    // Use this for initialization
 	void Start () {
         fadeTime = 0;
         Time.timeScale = 1;
@@ -28,7 +30,7 @@ public class EndController : MonoBehaviour {
             if (Input.anyKeyDown)
             {
                 ScoreManager.Instance.Reset();
-                SceneManager.LoadScene(0);
+                SceneManager.LoadScene(sceneIndex);
             }
         }
 	}
