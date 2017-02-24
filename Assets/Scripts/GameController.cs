@@ -49,7 +49,11 @@ public class GameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (ready)
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+        if (ready)
 		{
 			if (state == ControllerState.FADE_IN)
 			{

@@ -20,6 +20,10 @@ public class EndController : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         fadeTime += Time.deltaTime;
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
         if (fadeTime < 2)
         {
             currentColor = Color.Lerp(blackoutColor, clearColor, fadeTime / 2);
