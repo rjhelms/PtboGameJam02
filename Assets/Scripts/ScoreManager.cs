@@ -7,4 +7,10 @@ public class ScoreManager : Singleton<ScoreManager>
 
     public int Lives = 3;
     public int Level = 1;
+
+    public void Reset()
+    {
+        Lives = 3;
+        Level = 1;
+    }
 }
